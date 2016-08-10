@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
 
 public class EarthBehavior : MonoBehaviour {
-
-    //--- Methods ---
-    public void Start() {
-
-        // TODO: use this for initialization
+    void OnSelect()
+    {
+        if (!this.GetComponent<Rigidbody>())
+        {
+            var rigidbody = this.gameObject.AddComponent<Rigidbody>();
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        }
     }
 
-    public void Update() {
-
-        // TODO: update is called once per frame
-    }
+     
 }

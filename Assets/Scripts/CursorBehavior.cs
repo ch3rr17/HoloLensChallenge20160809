@@ -1,15 +1,38 @@
 ﻿using UnityEngine;
 
-public class CursorBehavior : MonoBehaviour {
+public class CursorBehavior : MonoBehaviour
+{
+
+    private MeshRenderer meshRenderer;
 
     //--- Methods ---
-    public void Start() {
-
-        // TODO: use this for initialization
+    public void Start()
+    {
+        meshRenderer = this.gameObject.GetComponentInChildren<MeshRenderer>();
     }
 
     public void Update() {
 
-        // TODO: update is called once per frame
+        // Do a raycast into the world based on the user's
+        // head position and orientation.
+        var headPosition = Camera.main.transform.position;
+        var gazeDirection = Camera.main.transform.forward;
+
+        RaycastHit hitInfo;
+
+        if(Physics.Raycast(headPosition, gazeDirection, out hitInfo)) {
+            // If the raycast hit a hologram...
+            // Display the cursor mesh.
+            meshRenderer.enabled = true;
+
+            // Move thecursor to the point where the raycast hit.
+            this.transform.position = hitInfo.point;
+
+            // Rotate the cursor to hug the surface of the hologram.
+            this.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+        } else {
+            // If the raycast did not hit a hologram, hide the cursor mesh.
+            meshRenderer.enabled = false;
+        }
     }
 }
